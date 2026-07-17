@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://d4g0n5fq6g7h2"]
+
+[ext_resource type="Script" uid="uid://be67n1empchme" path="res://scenes/world/OceanManager.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://b4k6t3h7y8f0" path="res://scenes/world/Water.tscn" id="2"]
+
+[node name="OceanManager" type="Node3D" unique_id=264850551]
+script = ExtResource("1")
+water_chunk = ExtResource("2")
+lod_center = 100
+lod_ring1 = 100
+lod_outer = 50
+grid_size = 3
+chunk_size = 200.0
+show_chunks = true

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://r12p3st3b060"]
+
+[ext_resource type="PackedScene" path="res://scenes/buoyancy/BuoyancyProbe.tscn" id="1_skgjb"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_sw73p"]
+
+[node name="Test" type="RigidBody3D" unique_id=1161100045]
+mass = 500.0
+
+[node name="BuoyancyProbe" parent="." unique_id=302434674 instance=ExtResource("1_skgjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.78919876, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2046473718]
+mesh = SubResource("BoxMesh_sw73p")

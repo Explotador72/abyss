@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://dko5hc4pkiqnf"]
+
+[ext_resource type="PackedScene" uid="uid://dgv8h73uyqv2f" path="res://scenes/player/Player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://d4g0n5fq6g7h2" path="res://scenes/world/OceanManager.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://r12p3st3b060" path="res://scenes/buoyancy/test.tscn" id="4_0nnu2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0nnu2"]
+
+[sub_resource type="Sky" id="Sky_6ryrm"]
+sky_material = SubResource("ProceduralSkyMaterial_0nnu2")
+
+[sub_resource type="Environment" id="Environment_ocean"]
+background_mode = 2
+background_color = Color(0.7845159, 0.5737964, 0.5485594, 1)
+sky = SubResource("Sky_6ryrm")
+ambient_light_source = 3
+ambient_light_color = Color(0.9882353, 0.9843137, 0.9882353, 1)
+fog_density = 0.004
+fog_height = 3.0
+fog_height_density = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_grnd"]
+size = Vector3(80, 1, 80)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sw73p"]
+
+[node name="Main" type="Node3D" unique_id=231815731]
+
+[node name="Player" parent="." unique_id=1382919764 instance=ExtResource("1")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 5, 0, 0)
+angular_damp = 5.0
+
+[node name="PirateShip" parent="Player/ShipModel" parent_id_path=PackedInt32Array(1382919764, 826271014) index="0" unique_id=1028053311]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, 0.011986494, 0, 1.0478942e-09)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1329425303]
+transform = Transform3D(0.988309, 0.097216, 0.117451, 0.035223, 0.603922, -0.796265, -0.14834, 0.791093, 0.593437, 0, 8.855, 13.377)
+light_color = Color(1, 0.95, 0.85, 1)
+shadow_enabled = true
+shadow_blur = 0.1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1365432487]
+environment = SubResource("Environment_ocean")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1524951884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=765250083]
+shape = SubResource("BoxShape3D_grnd")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=767352974]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, -0.993, 3.503, 1.992)
+visible = false
+light_energy = 16.0
+light_indirect_energy = 4.01
+light_volumetric_fog_energy = 10.663
+light_size = 0.683
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=432281172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.469643, 0, 0)
+mesh = SubResource("BoxMesh_sw73p")
+
+[node name="Test" parent="." unique_id=1632895108 instance=ExtResource("4_0nnu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3360195, 0.92369795, -2.7400112)
+
+[node name="OceanManager" parent="." unique_id=264850551 instance=ExtResource("3")]
+time_scale = 0.2
+normal_strength = 0.43
+
+[editable path="Player"]

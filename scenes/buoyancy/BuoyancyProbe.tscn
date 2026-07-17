@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://baiwc6vev4js7"]
+
+[ext_resource type="Script" uid="uid://4jwykdxc43d4" path="res://scripts/buoyancy_probe.gd" id="1"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3vao6"]
+top_radius = 0.2
+bottom_radius = 0.0
+height = 0.6533203
+
+[node name="BuoyancyProbe" type="MeshInstance3D" unique_id=1074235978]
+mesh = SubResource("CylinderMesh_3vao6")
+script = ExtResource("1")
