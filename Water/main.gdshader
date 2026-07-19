@@ -376,9 +376,10 @@ void fragment() {
 	water_color += white_crest_color * highlight * 0.5;
 
 	// ===== FOAM (steep faces + crests) =====
-	float face_foam = smoothstep(0.2, 0.6, steepness);
-	float crest_boost = smoothstep(0.3, 0.8, h);
-	float foam_area = face_foam * (0.3 + crest_boost * 0.7);
+	float face_foam = smoothstep(foam_depth_end, foam_depth_start, steepness);
+	float crest_boost = smoothstep(foam_crest_threshold - 0.2, foam_crest_threshold + 0.3, h) * foam_crest_amount;
+	crest_boost = clamp(crest_boost, 0.0, 1.0);
+	float foam_area = face_foam * (foam_cutoff + crest_boost * (1.0 - foam_cutoff));
 	float foam_strength = smoothstep(0.1, 0.5, foam_area);
 	vec3 foam_col = mix(foam_color, white_crest_color, crest_boost);
 	water_color = mix(water_color, foam_col, foam_strength * 0.85);
