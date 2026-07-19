@@ -64,6 +64,7 @@ mesh = SubResource("BoxMesh_sw73p")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3360195, 0.92369795, -2.7400112)
 
 [node name="OceanManager" parent="." unique_id=264850551 instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -100)
 time_scale = 0.2
 normal_strength = 0.43
 

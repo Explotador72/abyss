@@ -1,56 +1,13 @@
 [gd_scene format=3 uid="uid://diqquipg1cnro"]
 
-[ext_resource type="Shader" uid="uid://dbt25xrj7m1ov" path="res://Water/main.gdshader" id="1_dpi15"]
-[ext_resource type="Texture2D" uid="uid://c5gm5ndp6vbnd" path="res://Water/caust00.png" id="2_4ltle"]
+[ext_resource type="Material" uid="uid://c00x13qv8l2x1" path="res://Water/water_material.tres" id="1_nb0xa"]
+[ext_resource type="PackedScene" path="res://Water/OceanManager.tscn" id="3_nb0xa"]
+[ext_resource type="Material" uid="uid://dvsu7pdk6nk7w" path="res://Water/underwaterfx.tres" id="3_o7h6t"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sw73p"]
-render_priority = 0
-shader = ExtResource("1_dpi15")
-shader_parameter/max_depth = 10.0
-shader_parameter/water_level = 0.0
-shader_parameter/underwater_fog_color = Color(1.347661e-06, 0.55062425, 0.8419511, 1)
-shader_parameter/fade_start_depth = 0.5
-shader_parameter/sea_height = 1.3
-shader_parameter/sea_choppy = 4.0
-shader_parameter/sea_speed = 1.5
-shader_parameter/sea_freq = 0.08
-shader_parameter/ITER_GEOMETRY = 3
-shader_parameter/ITER_FRAGMENT = 5
-shader_parameter/refraction_strength = 1.0
-shader_parameter/refraction_distance_fade = 5.0
-shader_parameter/normal_epsilon = 0.001
-shader_parameter/normal_smoothness_dist = 1000.0
-shader_parameter/roughness = 0.125
-shader_parameter/metallic = 0.1750000083125
-shader_parameter/specular = 0.5
-shader_parameter/caustics_texture = ExtResource("2_4ltle")
-shader_parameter/caustics_scale = 2.0
-shader_parameter/caustics_speed = 0.1
-shader_parameter/caustics_intensity = 0.70000001043084
-shader_parameter/caustics_depth_fade = 0.0499999988824
-shader_parameter/foam_color = Color(1, 1, 1, 1)
-shader_parameter/foam_depth_start = 4.99999988824
-shader_parameter/foam_depth_end = 0.499999988824
-shader_parameter/foam_noise_scale = 2.0
-shader_parameter/foam_noise_speed = 1.0
-shader_parameter/foam_cutoff = 0.7
-shader_parameter/foam_crest_threshold = 0.7
-shader_parameter/foam_crest_amount = 2.0
-shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
-shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
-shader_parameter/voronoi_scale = 9.0
-shader_parameter/voronoi_strength = 0.8
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_sw73p"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 size = Vector2(2000, 2000)
 subdivide_width = 200
 subdivide_depth = 200
-
-[sub_resource type="BoxMesh" id="BoxMesh_ground"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_pillar1"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_pillar2"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sw73p"]
 top_radius = 2.0541992
@@ -69,28 +26,25 @@ ambient_light_source = 3
 [node name="Main" type="Node3D" unique_id=409317661]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=128647615]
-transform = Transform3D(23.739002, 0, 0, 0, 23.739002, 0, 0, 0, 23.739002, 0, 0.6996536, 0)
-material_override = SubResource("ShaderMaterial_sw73p")
-mesh = SubResource("PlaneMesh_sw73p")
-
-[node name="Ground" type="MeshInstance3D" parent="." unique_id=937356146]
-transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, -6, 0)
-mesh = SubResource("BoxMesh_ground")
-
-[node name="PillarTall" type="MeshInstance3D" parent="." unique_id=1878516410]
-transform = Transform3D(1, 0, 0, 0, 6, 0, 0, 0, 1, 5, -3, 5)
-mesh = SubResource("BoxMesh_pillar1")
-
-[node name="PillarShort" type="MeshInstance3D" parent="." unique_id=996906400]
-transform = Transform3D(1, 0, 0, 0, 3, 0, 0, 0, 1, -5, -1.5, -5)
-mesh = SubResource("BoxMesh_pillar2")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27889252, 1.2415695, 0.00050354004)
+material_override = ExtResource("1_nb0xa")
+mesh = SubResource("PlaneMesh_water")
 
 [node name="Cylinder" type="MeshInstance3D" parent="." unique_id=2061586644]
-transform = Transform3D(5.3917365, 0, 0, 0, 122.00749, 0, 0, 0, 5.3917365, 0, 0, 0)
+transform = Transform3D(5.3917365, 0, 0, 0, 122.00749, 0, 0, 0, 5.3917365, 0, 0, 14.10791)
+mesh = SubResource("CylinderMesh_sw73p")
+
+[node name="Cylinder2" type="MeshInstance3D" parent="." unique_id=138557991]
+transform = Transform3D(5.3917365, 0, 0, 0, 122.00749, 0, 0, 0, 5.3917365, 0, 0, -138.10907)
 mesh = SubResource("CylinderMesh_sw73p")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1944269436]
 environment = SubResource("Environment_sw73p")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=2109549437]
-transform = Transform3D(1, 0, 0, 0, 0.9725083, 0.23286824, 0, -0.23286824, 0.9725083, 0, 102.99426, 0)
+transform = Transform3D(1, 0, 0, 0, 0.9725083, 0.23286824, 0, -0.23286824, 0.9725083, 0, 16.983238, 22.076)
+
+[node name="OceanManager" parent="." unique_id=762726827 instance=ExtResource("3_nb0xa")]
+detail_freq = 0.196
+water_surface_material = ExtResource("1_nb0xa")
+underwater_fx_material = ExtResource("3_o7h6t")

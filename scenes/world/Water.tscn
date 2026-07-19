@@ -10,7 +10,7 @@
 [sub_resource type="ShaderMaterial" id="1"]
 render_priority = 0
 shader = ExtResource("1_bxf7b")
-shader_parameter/u_time = 1449.96
+shader_parameter/u_time = 19418.2732
 shader_parameter/height_scale = 1.25
 shader_parameter/u_wavelength_scale = 2.0
 shader_parameter/u_normal_a = ExtResource("5")
@@ -28,7 +28,7 @@ shader_parameter/u_uv_distortion = 0.08
 shader_parameter/u_deep_color = Color(0, 0.23051229, 0.47604924, 1)
 shader_parameter/u_mid_color = Color(0.02, 0.55, 0.75, 1)
 shader_parameter/u_shallow_color = Color(0, 0.5002057, 0.89814985, 1)
-shader_parameter/u_trough_color = Color(0, 0.28034174, 0.66582346, 1)
+shader_parameter/u_trough_color = Color(3.85046e-07, 0.2400966, 0.58369654, 1)
 shader_parameter/u_foam_color = Color(0.95, 0.98, 1, 1)
 shader_parameter/u_foam_shadow_color = Color(0.55, 0.75, 0.85, 1)
 shader_parameter/u_sun_color = Color(1, 0.96, 0.82, 1)
