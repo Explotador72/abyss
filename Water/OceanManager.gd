@@ -53,9 +53,17 @@ func get_wave_height(x: float, z: float) -> float:
 	var chop: float = sea_choppy
 	var height: float = 0.0
 
+	var wdir := Vector2(cos(deg_to_rad(wind_angle)), sin(deg_to_rad(wind_angle)))
+
 	for i in ITER_GEOMETRY:
-		var d: float = _sea_octave((uv + Vector2(t, t) * sea_speed) * freq, chop)
-		d += _sea_octave((uv - Vector2(t, t) * sea_speed) * freq, chop)
+		var oct_wind := wind_influence * (1.0 - 0.5 * float(i) / float(ITER_GEOMETRY))
+		var norm := 1.0 / sqrt(1.0 + oct_wind * oct_wind)
+		var wt := (1.0 + oct_wind) * norm
+		var ct := (1.0 - oct_wind) * norm
+		var t1: Vector2 = lerp(Vector2(1.0, 0.0), wdir, oct_wind).normalized()
+		var t2: Vector2 = lerp(Vector2(-1.0, 0.0), -wdir, oct_wind).normalized()
+		var d: float = _sea_octave((uv + t1 * sea_speed * t) * freq, chop) * wt
+		d += _sea_octave((uv + t2 * sea_speed * t) * freq, chop) * ct
 		height += d * amp
 		var ux: float = uv.x * OCTAVE_M_X + uv.y * OCTAVE_M_Y
 		var uy: float = uv.x * OCTAVE_M_Z + uv.y * OCTAVE_M_W
@@ -76,6 +84,14 @@ func get_wave_height(x: float, z: float) -> float:
 	set(v): sea_speed = v; _sync_mesh("sea_speed", v)
 @export var sea_freq: float = 0.2:
 	set(v): sea_freq = v; _sync_mesh("sea_freq", v)
+
+@export var wind_angle: float = 0.0:
+	set(v): wind_angle = v; _sync_shader_param("wind_angle", v)
+@export var wind_influence: float = 0.5:
+	set(v): wind_influence = v; _sync_shader_param("wind_influence", v)
+
+@export var debug_color: Color = Color(0.0, 0.3, 0.6):
+	set(v): debug_color = v; _sync_shader_param("debug_color", v)
 
 @export var fade_start: float = 100.0:
 	set(v): fade_start = v; _sync_mesh("fade_start", v)
@@ -147,10 +163,12 @@ func _enter_tree():
 	if p:
 		_water_mesh = p.get_node_or_null("MeshInstance3D") as MeshInstance3D
 	_sync_all_to_mesh()
+	_sync_all_shader_params()
 
 
 func _ready():
 	_sync_all_to_mesh()
+	_sync_all_shader_params()
 	_sync_fx()
 
 
@@ -158,6 +176,20 @@ func _sync_mesh(prop: String, value):
 	if not _water_mesh or not is_inside_tree():
 		return
 	_water_mesh.set(prop, value)
+
+
+func _sync_shader_param(prop: String, value):
+	if not water_surface_material or not is_inside_tree():
+		return
+	water_surface_material.set_shader_parameter(prop, value)
+
+
+func _sync_all_shader_params():
+	if not water_surface_material:
+		return
+	water_surface_material.set_shader_parameter(&"wind_angle", wind_angle)
+	water_surface_material.set_shader_parameter(&"wind_influence", wind_influence)
+	water_surface_material.set_shader_parameter(&"debug_color", debug_color)
 
 
 func _sync_all_to_mesh():

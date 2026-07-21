@@ -89,9 +89,9 @@ func _update_debug() -> void:
 	var mi := MeshInstance3D.new()
 	mi.name = "DebugOutline"
 	mi.mesh = st.commit()
-	mi.material_override = ORMMaterial3D.new()
+	mi.material_override = StandardMaterial3D.new()
 	mi.material_override.albedo_color = Color.GREEN_YELLOW
-	mi.material_override.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mi.material_override.shading_mode = StandardMaterial3D.SHADING_MODE_UNSHADED
 	add_child(mi)
 
 func _process(delta: float) -> void:

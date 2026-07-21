@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://86lpakklktrn"
+path="res://.godot/imported/clipmap_high.obj-f7997d8665a80ec8fc5232ec80656a64.mesh"
+
+[deps]
+
+files=["res://.godot/imported/clipmap_high.obj-f7997d8665a80ec8fc5232ec80656a64.mesh"]
+
+source_file="res://assets/meshes/clipmap/clipmap_high.obj"
+dest_files=["res://.godot/imported/clipmap_high.obj-f7997d8665a80ec8fc5232ec80656a64.mesh", "res://.godot/imported/clipmap_high.obj-f7997d8665a80ec8fc5232ec80656a64.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

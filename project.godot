@@ -27,6 +27,11 @@ settings/stdout/print_fps=true
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
+
+[editor]
+
+movie_writer/disable_vsync=true
 
 [physics]
 

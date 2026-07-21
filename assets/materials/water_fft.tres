@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b34m7n3o81h41"]
+
+[ext_resource type="Shader" uid="uid://d1qqq7r80bk" path="res://assets/shaders/spatial/water_fft.gdshader" id="1_xxyyz"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_xxyyz")

@@ -1,67 +1,33 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://c00x13qv8l2x1"]
 
 [ext_resource type="Shader" uid="uid://dbt25xrj7m1ov" path="res://Water/main.gdshader" id="1_qq0i3"]
-[ext_resource type="Texture2D" uid="uid://c5gm5ndp6vbnd" path="res://Water/caust00.png" id="2_7pwd5"]
-[ext_resource type="Texture2D" uid="uid://bjji3hxt24507" path="res://assets/textures/water_normal_a.jpg" id="3_7pwd5"]
-[ext_resource type="Texture2D" uid="uid://c1ukcs2b6dy85" path="res://assets/textures/water_normal_b.jpg" id="4_7pwd5"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_qq0i3")
-shader_parameter/sea_height = 0.515
-shader_parameter/sea_choppy = 3.207
-shader_parameter/sea_speed = 1.0
-shader_parameter/sea_freq = 0.2
-shader_parameter/detail_freq = 0.196
+shader_parameter/sea_height = 3.4
+shader_parameter/sea_choppy = 0.987
+shader_parameter/sea_speed = 0.69
+shader_parameter/sea_freq = 0.095
+shader_parameter/wind_angle = 0.0
+shader_parameter/wind_influence = 0.5
+shader_parameter/detail_freq = 1.001
 shader_parameter/fade_start = 100.0
-shader_parameter/fade_end = 400.0
+shader_parameter/fade_end = 600.0
 shader_parameter/texture_fade_start = 0.0
 shader_parameter/texture_fade_end = 514.613
-shader_parameter/max_depth = 10.000000149012
 shader_parameter/water_level = 0.0
-shader_parameter/underwater_fog_color = Color(0, 0.308, 0.48, 1)
-shader_parameter/fade_start_depth = 0.0
-shader_parameter/ITER_FRAGMENT = 1
-shader_parameter/refraction_strength = 0.96999997831856
-shader_parameter/refraction_distance_fade = 5.0
-shader_parameter/normal_epsilon = 0.18000000855
-shader_parameter/base_tint_color = Color(0, 0.9, 0.75, 1)
-shader_parameter/deep_color = Color(0, 0.1, 0.3, 1)
-shader_parameter/water_absorption = Color(1, 1, 1, 1)
-shader_parameter/wave_patch_strength = 0.065
-shader_parameter/wave_crest_color = Color(0.232, 0.232, 0.232, 1)
-shader_parameter/wave_mid_color = Color(0, 0.55, 0.75, 1)
-shader_parameter/wave_trough_color = Color(0, 0.3, 0.5, 1)
-shader_parameter/white_crest_amount = 0.245
-shader_parameter/white_crest_color = Color(0.895, 0.895, 0.895, 1)
-shader_parameter/surface_bubble_spread = 0.335
-shader_parameter/surface_bubble_density = 0.08
-shader_parameter/surface_residue_amount = 0.16
-shader_parameter/surface_bubble_color = Color(0.697, 0.697, 0.697, 1)
-shader_parameter/roughness = 0.0
+shader_parameter/ITER_FRAGMENT = 5
+shader_parameter/normal_epsilon = 0.198000009405
+shader_parameter/normal_smoothness_dist = 50.0
+shader_parameter/roughness = 0.32800001558
 shader_parameter/metallic = 0.0
-shader_parameter/specular = 0.5
-shader_parameter/normal_a = ExtResource("3_7pwd5")
-shader_parameter/normal_b = ExtResource("4_7pwd5")
-shader_parameter/normal_scale = Vector2(2.5, 2.5)
-shader_parameter/normal_scale2 = Vector2(3.5, 3.5)
-shader_parameter/normal_speed = 0.04
-shader_parameter/uv_distortion = 0.08
-shader_parameter/normal_strength = 0.25
-shader_parameter/caustics_texture = ExtResource("2_7pwd5")
-shader_parameter/caustics_scale = 2.0
-shader_parameter/caustics_speed = 0.1999999955296
-shader_parameter/caustics_intensity = 0.70000001043084
-shader_parameter/caustics_depth_fade = 0.53999998792992
+shader_parameter/specular = 0.3
 shader_parameter/foam_color = Color(1, 1, 1, 1)
-shader_parameter/foam_depth_start = 2.82999993674384
-shader_parameter/foam_depth_end = 0.0
-shader_parameter/foam_noise_scale = 3.8999999128272
-shader_parameter/foam_noise_speed = 0.31999999284736
-shader_parameter/foam_cutoff = 0.33999999240032
-shader_parameter/foam_crest_threshold = 0.249999994412
-shader_parameter/foam_crest_amount = 5.20000007748624
-shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
-shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
-shader_parameter/voronoi_scale = 9.0
-shader_parameter/voronoi_strength = 0.8
+shader_parameter/foam_depth_start = 2.83
+shader_parameter/foam_noise_speed = 0.32
+shader_parameter/debug_color = Color(0, 0.3, 0.6, 1)
+shader_parameter/foam_falloff_bias = 0.5
+shader_parameter/leading_edge_falloff = 0.15
+shader_parameter/edge_pattern_scale = 4.0
+shader_parameter/edge_pattern_scroll = 0.1
