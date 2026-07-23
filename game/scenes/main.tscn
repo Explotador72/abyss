@@ -11,7 +11,7 @@
 [node name="Main" type="Node3D" unique_id=751255594]
 
 [node name="OceanSystem" parent="." unique_id=1912029964 instance=ExtResource("1_20rwd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.30830002, 0, -0.34187222)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.032536, 0, -13.170761)
 water_color = Color(8.904189e-07, 0.28770375, 0.32488927, 1)
 water_deep_color = Color(0.014753374, 0.2035498, 0.38014144, 1)
 height_crest = 1.62
@@ -24,6 +24,7 @@ stylized_flatness = 0.65
 wind_external = NodePath("../WindSystem")
 simulation_map_size = 512
 follow_camera_in_editor = true
+freeze_wave_simulation = true
 debug_use_generated_mesh_in_editor = true
 far_lod_radius = 666.0
 
@@ -43,7 +44,7 @@ texture = ExtResource("3_8buom")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.307933, 1.6083913, -10.195515)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1101517580]
-transform = Transform3D(0.14665031, 0.44838023, -0.8817306, 1.3130084e-08, 0.89136773, 0.4532809, 0.98918843, -0.0664738, 0.13071936, 0.30830002, 6.828908, -0.34187222)
+transform = Transform3D(-0.046789885, -0.44889534, 0.8923585, 0, 0.8933369, 0.44938752, -0.99890476, 0.02102679, -0.04179913, 24.032536, 8.431568, -13.170761)
 script = ExtResource("5_8buom")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=579529627]
