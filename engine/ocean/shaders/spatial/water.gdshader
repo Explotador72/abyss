@@ -155,7 +155,7 @@ void vertex() {
 		displacement += mix(active_displacement, pending_displacement, blend_state.z) * scales.z * height_crest * cascade_weight;
 	}
 	VERTEX += displacement;
-	water_world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	water_world_position = VERTEX;
 }
 
 /** Filter weights for a cubic B-spline. */

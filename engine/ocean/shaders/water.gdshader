@@ -131,9 +131,8 @@ float get_linear_depth(sampler2D d_tex, vec2 uv, mat4 inv_proj) {
 }
 
 void vertex() {
-	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	UV = world_pos.xz;
-	distance_to_camera = length(world_pos.xz - CAMERA_POSITION_WORLD.xz);
+	UV = VERTEX.xz;
+	distance_to_camera = length(VERTEX.xz - CAMERA_POSITION_WORLD.xz);
 	distance_lod = get_distance_lod(distance_to_camera);
 
 	// Read displacements from displacement maps.
@@ -157,7 +156,7 @@ void vertex() {
 		displacement += mix(active_displacement, pending_displacement, blend_state.z) * scales.z * height_crest * cascade_weight;
 	}
 	VERTEX += displacement;
-	water_world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	water_world_position = VERTEX;
 }
 
 /** Filter weights for a cubic B-spline. */
