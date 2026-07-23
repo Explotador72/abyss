@@ -723,6 +723,7 @@ func _update_follow_camera() -> void:
 	target_position.x = camera.global_position.x
 	target_position.z = camera.global_position.z
 	global_position = target_position
+	_set_water_shader_parameter(&'mesh_center', Vector2(global_position.x, global_position.z))
 
 func _segments_for_ring(radius: float) -> int:
 	return clampi(int(ceil(TAU * radius / maxf(target_arc_length, 0.1))), min_ring_segments, max_ring_segments)
