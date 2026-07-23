@@ -708,7 +708,7 @@ func _update_follow_camera() -> void:
 	if camera == null:
 		return
 
-	var snap_grid := 0.05
+	var snap_grid := 0.5
 	global_position.x = snapped(camera.global_position.x, snap_grid)
 	global_position.z = snapped(camera.global_position.z, snap_grid)
 
