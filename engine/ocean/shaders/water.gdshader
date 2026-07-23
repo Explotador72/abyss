@@ -135,8 +135,8 @@ void vertex() {
 	distance_to_camera = length(VERTEX.xz - CAMERA_POSITION_WORLD.xz);
 	distance_lod = get_distance_lod(distance_to_camera);
 
-	// Read displacements from displacement maps.
 	vec3 displacement = vec3(0);
+	float vtx_spacing = COLOR.r;
 	for (uint i = 0U; i < uint(num_cascades); ++i) {
 		vec4 scales = map_scales[i];
 		if (scales.z == 0.0)
@@ -144,6 +144,11 @@ void vertex() {
 		float cascade_weight = get_cascade_lod_weight(scales, distance_lod);
 		if (cascade_weight <= 0.0)
 			continue;
+
+		float ds = max(scales.x, scales.y) * wave_freq * vtx_spacing;
+		float vtx_per_texel = 1.0 / max(ds, 1e-5);
+		float geo_aa = clamp(vtx_per_texel - 1.0, 0.0, 1.0);
+
 		vec4 blend_state = spectrum_blend_states[i];
 		vec3 active_coords = vec3(UV * scales.xy * wave_freq, blend_state.x);
 		vec3 pending_coords = vec3(UV * scales.xy * wave_freq, blend_state.y);
@@ -153,7 +158,7 @@ void vertex() {
 		vec3 current_pending = texture(displacements, pending_coords).xyz;
 		vec3 active_displacement = mix(previous_active, current_active, wave_blend_alpha);
 		vec3 pending_displacement = mix(previous_pending, current_pending, wave_blend_alpha);
-		displacement += mix(active_displacement, pending_displacement, blend_state.z) * scales.z * height_crest * cascade_weight;
+		displacement += mix(active_displacement, pending_displacement, blend_state.z) * scales.z * height_crest * cascade_weight * geo_aa;
 	}
 	VERTEX += displacement;
 	water_world_position = VERTEX;

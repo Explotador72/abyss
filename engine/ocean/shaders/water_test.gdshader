@@ -17,6 +17,7 @@ uniform vec3 sky_sun_direction = vec3(0.0, 0.2, -1.0);
 uniform vec4 sky_sun_color : source_color = vec4(1.0, 0.92, 0.72, 1.0);
 uniform float sky_sun_visibility : hint_range(0.0, 1.0) = 1.0;
 uniform float normal_strength : hint_range(0.0, 1.0) = 1.0;
+uniform float stylized_flatness : hint_range(0.0, 1.0) = 0.0;
 uniform float foam_intensity : hint_range(0.0, 2.0) = 0.539;
 uniform float foam_threshold : hint_range(0.0, 2.0) = 0.235;
 uniform float foam_softness : hint_range(0.01, 2.0) = 0.35;
@@ -130,12 +131,13 @@ float get_linear_depth(sampler2D d_tex, vec2 uv, mat4 inv_proj) {
 }
 
 void vertex() {
+	float test_fw = fwidth(VERTEX.xz);
 	UV = VERTEX.xz;
-	distance_to_camera = length(VERTEX.xz);
+	distance_to_camera = length(VERTEX.xz - CAMERA_POSITION_WORLD.xz);
 	distance_lod = get_distance_lod(distance_to_camera);
 
+	// Read displacements from displacement maps.
 	vec3 displacement = vec3(0);
-	float vtx_spacing = COLOR.r;
 	for (uint i = 0U; i < uint(num_cascades); ++i) {
 		vec4 scales = map_scales[i];
 		if (scales.z == 0.0)
@@ -143,11 +145,6 @@ void vertex() {
 		float cascade_weight = get_cascade_lod_weight(scales, distance_lod);
 		if (cascade_weight <= 0.0)
 			continue;
-
-		float ds = max(scales.x, scales.y) * wave_freq * vtx_spacing;
-		float vtx_per_texel = 1.0 / max(ds, 1e-5);
-		float geo_aa = clamp(vtx_per_texel - 1.0, 0.0, 1.0);
-
 		vec4 blend_state = spectrum_blend_states[i];
 		vec3 active_coords = vec3(UV * scales.xy * wave_freq, blend_state.x);
 		vec3 pending_coords = vec3(UV * scales.xy * wave_freq, blend_state.y);
@@ -157,7 +154,7 @@ void vertex() {
 		vec3 current_pending = texture(displacements, pending_coords).xyz;
 		vec3 active_displacement = mix(previous_active, current_active, wave_blend_alpha);
 		vec3 pending_displacement = mix(previous_pending, current_pending, wave_blend_alpha);
-		displacement += mix(active_displacement, pending_displacement, blend_state.z) * scales.z * height_crest * cascade_weight * geo_aa;
+		displacement += mix(active_displacement, pending_displacement, blend_state.z) * scales.z * height_crest * cascade_weight;
 	}
 	VERTEX += displacement;
 	water_world_position = VERTEX;
@@ -218,12 +215,10 @@ void fragment() {
 	foam_factor = 0.0;
 	vec3 world_normal = vec3(0.0, 1.0, 0.0);
 
-	// Water depth and scene thickness
 	float water_linear = -VERTEX.z;
 	float scene_linear = get_linear_depth(depth_tex, SCREEN_UV, INV_PROJECTION_MATRIX);
 	float thickness = max(0.0, scene_linear - water_linear);
 
-	// Depth-based object foam
 	float object_foam = 0.0;
 	if (scene_linear > water_linear) {
 		vec2 w_uv = water_world_position.xz * 1.5;
@@ -245,7 +240,6 @@ void fragment() {
 
 	if (num_cascades > 0) {
 		float map_size = float(textureSize(normals, 0).x);
-		// Read foam and normal information from normal maps.
 		uint cascade_count = min(uint(num_cascades), uint(fragment_cascade_limit));
 		for (uint i = 0U; i < cascade_count; ++i) {
 			vec4 scales = map_scales[i];
@@ -260,9 +254,7 @@ void fragment() {
 			vec4 previous_pending_sample = texture(previous_normals, pending_coords);
 			vec4 current_pending_sample = texture(normals, pending_coords);
 			if (use_bicubic_normals) {
-				float ppm = map_size * min(scales.x, scales.y); // Pixels per meter
-				// Mix between bicubic and bilinear filtering depending on the world space pixels per meter.
-				// This is dependent on the tile size as well as displacement/normal map resolution.
+				float ppm = map_size * min(scales.x, scales.y);
 				previous_active_sample = mix(texture_bicubic(previous_normals, active_coords), previous_active_sample, min(1.0, ppm*0.1));
 				current_active_sample = mix(texture_bicubic(normals, active_coords), current_active_sample, min(1.0, ppm*0.1));
 				previous_pending_sample = mix(texture_bicubic(previous_normals, pending_coords), previous_pending_sample, min(1.0, ppm*0.1));
@@ -288,6 +280,7 @@ void fragment() {
 		float near_normal_fade = exp(-dist*0.0175);
 		float far_normal_fade = far_normal_strength * 0.35;
 		gradient *= normal_strength * mix(max(near_normal_fade, 0.015), far_normal_fade, fragment_distance_lod);
+		gradient *= 1.0 - stylized_flatness * 0.9;
 		world_normal = normalize(vec3(-gradient.x, 1.0, -gradient.y));
 		NORMAL = (VIEW_MATRIX * vec4(world_normal, 0.0)).xyz;
 	}
@@ -325,24 +318,44 @@ void fragment() {
 		vec3 c_mid = water_color.rgb;
 		vec3 c_lit = water_color.rgb * max(water_lit_tint.rgb, vec3(1.0));
 		vec3 c_foam = foam_color.rgb;
-		vec3 clean_col = mix(c_shadow, c_mid, smoothstep(0.25, 0.45, clean_ndotl));
-		clean_col = mix(clean_col, c_lit, smoothstep(0.55, 0.80, clean_ndotl));
-		clean_col = mix(clean_col, c_foam, saturate(foam_factor));
-		float clean_spec_dot = pow(max(dot(view_direction_world, reflect(-sun_dir, world_normal)), 0.0), 8.0) * exp(-dist * 0.004) * (1.0 - foam_factor);
-		clean_col += sky_sun_color.rgb * clean_spec_dot * 0.25;
-		float clean_rim_l = pow(1.0 - saturate(no_v), 2.5) * water_rim_strength;
-		clean_col *= 1.0 + clean_rim_l * 0.4;
 
-		// Sample scene behind water via screen texture
+		// Stylized color banding (Sea of Thieves inspired)
+		float band_t = clean_ndotl;
+		vec3 banded;
+		if (band_t < 0.35) {
+			banded = c_shadow;
+		} else if (band_t < 0.55) {
+			banded = c_mid;
+		} else {
+			banded = c_lit;
+		}
+		vec3 clean_col = banded;
+
+		// Crest foam: whitecaps on wave tops
+		float crest = smoothstep(0.6, 0.95, clean_ndotl);
+		float crest_foam = crest * 0.6 * (1.0 - foam_factor * 0.5);
+		crest_foam = max(crest_foam, 0.0) * (1.0 - stylized_flatness * 0.7);
+
+		// Painterly foam overlay
+		float painterly_foam = saturate(foam_factor * (1.4 - stylized_flatness * 0.6));
+		float total_foam = saturate(painterly_foam + crest_foam);
+		clean_col = mix(clean_col, c_foam, total_foam);
+
+		// Stylized specular highlight as a sharp dot
+		float spec_intensity = 0.35 * (1.0 - stylized_flatness * 0.9);
+		float clean_spec_dot = pow(max(dot(view_direction_world, reflect(-sun_dir, world_normal)), 0.0), 16.0);
+		clean_spec_dot *= smoothstep(0.0, 0.3, clean_ndotl);
+		clean_col += sky_sun_color.rgb * clean_spec_dot * spec_intensity * (1.0 - total_foam);
+
+		// Stylized rim light
+		float clean_rim_l = pow(1.0 - saturate(no_v), 3.0) * water_rim_strength;
+		clean_col += vec3(0.6, 0.7, 0.9) * clean_rim_l * 0.3;
+
 		vec3 scene_color = texture(screen_tex, SCREEN_UV).rgb;
+		float fresnel = pow(1.0 - no_v, 3.0);
 
-		// Fresnel
-		float fresnel = pow(1.0 - no_v, 2.0);
-
-		// Compose final color
 		vec3 final_col;
 		if (scene_linear > water_linear) {
-			// Underwater absorption
 			vec3 absorb = water_absorb;
 			float depth_blend = clamp(thickness / water_absorb_distance, 0.0, 1.0);
 			depth_blend = 1.0 - exp(-depth_blend * 4.5);
@@ -350,22 +363,20 @@ void fragment() {
 			vec3 leftover = vec3(1.0) - absorb;
 			underwater_col = mix(underwater_col, leftover, depth_blend * depth_blend);
 
-			// Water opacity based on thickness and fresnel
 			float water_alpha = 1.0 - exp(-thickness / water_absorb_distance * 4.0);
 			water_alpha = mix(water_alpha, 1.0, fresnel * water_fresnel_strength);
-			water_alpha = max(water_alpha, foam_factor);
+			water_alpha = max(water_alpha, total_foam);
 
-			// Mix absorbed scene with stylized water
 			final_col = mix(underwater_col, clean_col, water_alpha);
 		} else {
 			final_col = clean_col;
 		}
 
-		// Fresnel highlight on top
-		final_col = mix(final_col, water_fresnel_color, fresnel * water_fresnel_strength * (1.0 - foam_factor));
+		final_col = mix(final_col, water_fresnel_color, fresnel * water_fresnel_strength * (1.0 - total_foam));
 
 		ALBEDO = clamp(final_col, 0.0, 1.0);
 		EMISSION = vec3(0.0);
 		ALPHA = 1.0;
 	}
 }
+

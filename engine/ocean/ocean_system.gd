@@ -723,6 +723,7 @@ func _create_generated_clipmap_mesh() -> ArrayMesh:
 	var vertices := PackedVector3Array()
 	var normals := PackedVector3Array()
 	var uvs := PackedVector2Array()
+	var colors := PackedColorArray()
 	var indices := PackedInt32Array()
 
 	var radii := _build_circular_clipmap_radii()
@@ -746,17 +747,25 @@ func _create_generated_clipmap_mesh() -> ArrayMesh:
 	vertices.push_back(Vector3.ZERO)
 	normals.push_back(Vector3.UP)
 	uvs.push_back(Vector2.ZERO)
+	colors.push_back(Color(0.001, 0, 0, 1))
 
 	for ri in range(1, radial_count):
 		ring_offsets[ri] = vertices.size()
 		var s := ring_segments[ri]
 		var r := radii[ri]
+		var r_in := radii[ri - 1]
+		var r_out := radii[ri + 1] if ri + 1 < radial_count else 1e10
 		for k in range(s):
 			var angle := TAU * float(k) / float(s)
 			var pos := Vector3(cos(angle) * r, 0.0, sin(angle) * r)
 			vertices.push_back(pos)
 			normals.push_back(Vector3.UP)
 			uvs.push_back(Vector2(pos.x, pos.z))
+			var t_spacing := TAU * r / float(s)
+			var r_spacing_in := r - r_in
+			var r_spacing_out := r_out - r
+			var min_spacing := mini(t_spacing, mini(r_spacing_in, r_spacing_out))
+			colors.push_back(Color(min_spacing, 0, 0, 1))
 
 	var s1 := ring_segments[1]
 	var off1 := ring_offsets[1]
@@ -838,6 +847,7 @@ func _create_generated_clipmap_mesh() -> ArrayMesh:
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	arrays[Mesh.ARRAY_NORMAL] = normals
 	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_COLOR] = colors
 	arrays[Mesh.ARRAY_INDEX] = indices
 
 	var array_mesh := ArrayMesh.new()
