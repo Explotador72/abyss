@@ -708,9 +708,10 @@ func _update_follow_camera() -> void:
 	if camera == null:
 		return
 
-	var snap_grid := 0.5
-	global_position.x = snapped(camera.global_position.x, snap_grid)
-	global_position.z = snapped(camera.global_position.z, snap_grid)
+	var target_position := global_position
+	target_position.x = camera.global_position.x
+	target_position.z = camera.global_position.z
+	global_position = target_position
 
 func _segments_for_ring(radius: float) -> int:
 	return clampi(int(ceil(TAU * radius / maxf(target_arc_length, 0.1))), min_ring_segments, max_ring_segments)
