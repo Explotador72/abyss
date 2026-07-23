@@ -711,6 +711,8 @@ func _update_follow_camera() -> void:
 	var target_position := global_position
 	target_position.x = camera.global_position.x
 	target_position.z = camera.global_position.z
+	if global_position.distance_squared_to(target_position) > 0.01:
+		prints("Ocean offset:", global_position.x - target_position.x, global_position.z - target_position.z, "Cam:", camera.global_position, "Ocean:", global_position)
 	global_position = target_position
 
 func _segments_for_ring(radius: float) -> int:
