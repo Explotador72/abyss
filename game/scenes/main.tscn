@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dnyhdgn7p41ax" path="res://engine/wind/wind_system.gd" id="2_gp8w2"]
 [ext_resource type="Texture2D" uid="uid://0sm3ieeolp3i" path="res://assets/ui/Arrow.png" id="3_8buom"]
 [ext_resource type="PackedScene" uid="uid://df5p5ldgvcsu3" path="res://game/world/buoyancy/buoy.tscn" id="4_8buom"]
+[ext_resource type="Script" uid="uid://d1xqjvb6uw0ry" path="res://game/scripts/free_fly_camera.gd" id="5_8buom"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sw73p"]
 
@@ -42,6 +43,7 @@ texture = ExtResource("3_8buom")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.307933, 1.6083913, -10.195515)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1101517580]
+script = ExtResource("5_8buom")
 transform = Transform3D(0.14665031, 0.44838023, -0.8817306, 1.3130084e-08, 0.89136773, 0.4532809, 0.98918843, -0.0664738, 0.13071936, 9.790937, 6.828908, -3.2047577)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=579529627]
