@@ -441,6 +441,7 @@ func _ready() -> void:
 	_update_sky_lighting_shader_parameters()
 	_update_far_lod_shader_parameters()
 	_update_water_mesh()
+	_set_water_shader_parameter(&'mesh_center', Vector2(global_position.x, global_position.z))
 
 func _process(delta : float) -> void:
 	_update_follow_camera()
