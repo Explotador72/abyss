@@ -514,6 +514,17 @@ func _update_scales_uniform() -> void:
 		var uv_scale := Vector2.ONE / params.tile_length
 		map_scales[i] = Vector4(uv_scale.x, uv_scale.y, params.displacement_scale, params.normal_scale)
 	_set_water_shader_parameter(&'map_scales', map_scales)
+
+	var snap_grid := 1e10
+	for i in cascade_count:
+		var params := parameters[i]
+		if params == null:
+			continue
+		var texel := minf(params.tile_length.x, params.tile_length.y) / float(simulation_map_size)
+		var effective := texel / maxf(wave_freq, 0.001)
+		snap_grid = minf(snap_grid, effective)
+	_set_water_shader_parameter(&'snap_grid', 0.05 if snap_grid > 1e9 else snap_grid)
+
 	_update_spectrum_blend_uniform()
 
 func _update_spectrum_blend_uniform() -> void:
@@ -708,18 +719,10 @@ func _update_follow_camera() -> void:
 	if camera == null:
 		return
 
-	var snap_grid := 1e10
-	for params in parameters:
-		if params == null:
-			continue
-		var texel := minf(params.tile_length.x, params.tile_length.y) / float(simulation_map_size)
-		var effective_texel := texel / maxf(wave_freq, 0.001)
-		snap_grid = minf(snap_grid, effective_texel)
-	if snap_grid > 1e9:
-		snap_grid = 0.05
-
-	global_position.x = snapped(camera.global_position.x, snap_grid)
-	global_position.z = snapped(camera.global_position.z, snap_grid)
+	var target_position := global_position
+	target_position.x = camera.global_position.x
+	target_position.z = camera.global_position.z
+	global_position = target_position
 
 func _segments_for_ring(radius: float) -> int:
 	return clampi(int(ceil(TAU * radius / maxf(target_arc_length, 0.1))), min_ring_segments, max_ring_segments)
