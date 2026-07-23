@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://df5p5ldgvcsu3"]
+
+[ext_resource type="PackedScene" uid="uid://6s7q5px76v8o" path="res://assets/models/buoys/red_marine_navigation_buoy_game_ready.glb" id="1_bcnse"]
+[ext_resource type="Script" uid="uid://bxm4xy5rpbnp1" path="res://engine/buoyancy/buoyant_body.gd" id="1_hiafl"]
+[ext_resource type="Script" uid="uid://bipc8203jvtrk" path="res://engine/buoyancy/buoyancy_probe_node.gd" id="2_5dfo2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hiafl"]
+transparency = 1
+cull_mode = 2
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.1, 0.8, 1, 0.32)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hiafl"]
+radius = 0.16
+height = 0.16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5dfo2"]
+transparency = 1
+cull_mode = 2
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.1, 0.8, 1, 0.32)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pvo8p"]
+radius = 0.16
+height = 0.16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3pom5"]
+transparency = 1
+cull_mode = 2
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.1, 0.8, 1, 0.32)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kuyqs"]
+radius = 0.16
+height = 0.16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n2nkr"]
+transparency = 1
+cull_mode = 2
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.1, 0.8, 1, 0.32)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4wai4"]
+radius = 0.16
+height = 0.16
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sw73p"]
+radius = 0.8935547
+height = 5.003998
+
+[node name="Buoy" type="Node3D" unique_id=607401778]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1716822853]
+mass = 10000.0
+
+[node name="Node" type="Node" parent="RigidBody3D" unique_id=607152567]
+script = ExtResource("1_hiafl")
+rigid_body_path = NodePath("..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D/Node" unique_id=1983394865]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09623456, 0.7496809)
+material_override = SubResource("StandardMaterial3D_hiafl")
+cast_shadow = 0
+extra_cull_margin = 10000.0
+mesh = SubResource("SphereMesh_hiafl")
+script = ExtResource("2_5dfo2")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D/Node" unique_id=744455323]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09623456, -0.7623819)
+material_override = SubResource("StandardMaterial3D_5dfo2")
+cast_shadow = 0
+extra_cull_margin = 10000.0
+mesh = SubResource("SphereMesh_pvo8p")
+script = ExtResource("2_5dfo2")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="RigidBody3D/Node" unique_id=489241027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.90636116, -0.09623456, -0.017625809)
+material_override = SubResource("StandardMaterial3D_3pom5")
+cast_shadow = 0
+extra_cull_margin = 10000.0
+mesh = SubResource("SphereMesh_kuyqs")
+script = ExtResource("2_5dfo2")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="RigidBody3D/Node" unique_id=1316967126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8467426, -0.09623456, -0.017625809)
+material_override = SubResource("StandardMaterial3D_n2nkr")
+cast_shadow = 0
+extra_cull_margin = 10000.0
+mesh = SubResource("SphereMesh_4wai4")
+script = ExtResource("2_5dfo2")
+
+[node name="Sketchfab_Scene" parent="RigidBody3D" unique_id=556656489 instance=ExtResource("1_bcnse")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1248120883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67802477, 0)
+shape = SubResource("CapsuleShape3D_sw73p")

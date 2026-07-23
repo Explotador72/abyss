@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://lsh7kr3nyl2t"]
+
+[ext_resource type="Script" uid="uid://b5pp7opghwmg0" path="res://engine/ocean/ocean_system.gd" id="1_ocean"]
+[ext_resource type="PlaneMesh" uid="uid://dtpaawspelqaj" path="res://engine/ocean/editor_water_preview_mesh.tres" id="2_4nq2d"]
+[ext_resource type="Script" uid="uid://dbcrtpncd0rji" path="res://engine/ocean/wave_cascade_parameters.gd" id="2_params"]
+[ext_resource type="Material" uid="uid://byumtcccq4ew3" path="res://engine/ocean/shaders/mat_water.tres" id="3_water_mat"]
+
+[sub_resource type="Resource" id="Resource_primary_swell"]
+script = ExtResource("2_params")
+tile_length = Vector2(96, 96)
+displacement_scale = 0.9
+wind_speed = 8.0
+wind_direction = 20.0
+fetch_length = 15.0
+swell = 0.65
+spread = 0.3
+foam_amount = 3.5
+
+[sub_resource type="Resource" id="Resource_secondary_swell"]
+script = ExtResource("2_params")
+tile_length = Vector2(24, 24)
+displacement_scale = 0.45
+normal_scale = 0.9
+wind_speed = 7.0
+wind_direction = 18.0
+wind_speed_multiplier = 1.2
+fetch_length = 5.0
+swell = 0.45
+spread = 0.45
+foam_amount = 2.0
+
+[sub_resource type="Resource" id="Resource_surface_detail"]
+script = ExtResource("2_params")
+tile_length = Vector2(6, 6)
+displacement_scale = 0.1
+normal_scale = 0.6
+wind_speed = 7.0
+wind_direction = 22.0
+wind_speed_multiplier = 1.8
+fetch_length = 2.0
+swell = 0.25
+spread = 0.55
+whitecap = 0.8
+foam_amount = 1.8
+
+[node name="OceanSystem" type="MeshInstance3D" unique_id=1912029964]
+process_priority = 100
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0015878677, 0.01851654, 0.0036773682)
+sorting_offset = 999.0
+material_override = ExtResource("3_water_mat")
+cast_shadow = 0
+extra_cull_margin = 362.03867
+mesh = ExtResource("2_4nq2d")
+script = ExtResource("1_ocean")
+water_color = Color(0, 0.5785445, 0.8673133, 1)
+water_deep_color = Color(0.20934144, 0.6798238, 0.94979554, 1)
+water_rim_strength = 0.0
+height_crest = 0.72
+manual_sun_color = Color(0.9999998, 0.9003943, 0.64517516, 1)
+foam_intensity = 0.18
+foam_threshold = 0.05
+foam_softness = 0.35
+parameters = Array[ExtResource("2_params")]([SubResource("Resource_primary_swell"), SubResource("Resource_secondary_swell"), SubResource("Resource_surface_detail")])
+mesh_base_cell_size = 0.5
+far_lod_radius = 256.0

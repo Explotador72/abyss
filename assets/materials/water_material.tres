@@ -1,9 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://watermat"]
-
-[ext_resource type="Shader" uid="uid://b2cqyfgxakpmb" path="res://assets/shaders/water-v2.gdshader" id="1"]
-
-[resource]
-render_priority = 0
-shader = ExtResource("1")
-shader_parameter/metallic = 0.05
-shader_parameter/roughness = 0.1

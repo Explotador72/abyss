@@ -1,0 +1,62 @@
+[gd_resource type="ShaderMaterial" format=4 uid="uid://byumtcccq4ew3"]
+
+[ext_resource type="Shader" uid="uid://bm4ddsntsxw8t" path="res://engine/ocean/shaders/water.gdshader" id="1_uffek"]
+
+[sub_resource type="Texture2DArrayRD" id="Texture2DArrayRD_o3br0"]
+
+[sub_resource type="Texture2DArrayRD" id="Texture2DArrayRD_mnc8s"]
+
+[sub_resource type="Texture2DArrayRD" id="Texture2DArrayRD_wf0ue"]
+
+[sub_resource type="Texture2DArrayRD" id="Texture2DArrayRD_ancwp"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_uffek")
+shader_parameter/water_color = Color(8.904189e-07, 0.28770375, 0.32488927, 1)
+shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/water_deep_color = Color(0.014753374, 0.2035498, 0.38014144, 1)
+shader_parameter/water_lit_tint = Color(1.15, 1.05, 0.85, 1)
+shader_parameter/water_rim_strength = 0.0
+shader_parameter/sky_sun_direction = Vector3(0, 0.19611615, -0.9805807)
+shader_parameter/sky_sun_color = Color(0.9999998, 0.9003943, 0.64517516, 1)
+shader_parameter/sky_sun_visibility = 1.0
+shader_parameter/normal_strength = 1.0
+shader_parameter/stylized_flatness = 0.65
+shader_parameter/foam_intensity = 0.4670000221825
+shader_parameter/foam_threshold = 0.4110000195225
+shader_parameter/foam_softness = 0.35
+shader_parameter/use_bicubic_normals = true
+shader_parameter/fragment_cascade_limit = 3
+shader_parameter/enable_far_lod = true
+shader_parameter/near_ocean_radius = 256.0
+shader_parameter/far_lod_radius = 256.0
+shader_parameter/far_lod_blend_distance = 1400.0
+shader_parameter/far_lod_curve = 1.8
+shader_parameter/far_low_frequency_tile_length = 32.0
+shader_parameter/far_normal_strength = 0.14
+shader_parameter/far_foam_coverage = 0.24
+shader_parameter/far_foam_threshold_boost = 0.2
+shader_parameter/height_crest = 1.0
+shader_parameter/wave_freq = 1.0
+shader_parameter/detail_freq = 1.0
+shader_parameter/water_speed = 1.0
+shader_parameter/water_debug_view = 0
+shader_parameter/object_foam_depth_start = 2.83
+shader_parameter/object_foam_falloff_bias = 0.5
+shader_parameter/object_foam_leading_edge = 0.15
+shader_parameter/object_foam_pattern_scale = 4.0
+shader_parameter/object_foam_pattern_scroll = 0.1
+shader_parameter/object_foam_noise_speed = 0.32
+shader_parameter/water_absorb = Color(1, 1, 1, 1)
+shader_parameter/water_absorb_distance = 6.0
+shader_parameter/water_fresnel_color = Color(0.22989231, 0.7708454, 0.97400147, 1)
+shader_parameter/water_fresnel_strength = 0.6
+shader_parameter/map_scales = PackedVector4Array(0.010416667, 0.010416667, 0.9, 1, 0.041666668, 0.041666668, 0.45, 0.9, 0.16666667, 0.16666667, 0.1, 0.6)
+shader_parameter/spectrum_blend_states = PackedVector4Array(1, 0, 0.7757493, 0, 3, 2, 0, 0, 5, 4, 0, 0)
+shader_parameter/num_cascades = 3
+shader_parameter/displacements = SubResource("Texture2DArrayRD_o3br0")
+shader_parameter/normals = SubResource("Texture2DArrayRD_mnc8s")
+shader_parameter/previous_displacements = SubResource("Texture2DArrayRD_wf0ue")
+shader_parameter/previous_normals = SubResource("Texture2DArrayRD_ancwp")
+shader_parameter/wave_blend_alpha = 0.7868226041573588
