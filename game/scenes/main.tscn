@@ -10,7 +10,7 @@
 [node name="Main" type="Node3D" unique_id=751255594]
 
 [node name="OceanSystem" parent="." unique_id=1912029964 instance=ExtResource("1_20rwd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.000837, 0, -143.93774)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.000837, 0, -127.00719)
 water_color = Color(8.904189e-07, 0.28770375, 0.32488927, 1)
 water_deep_color = Color(0.014753374, 0.2035498, 0.38014144, 1)
 height_crest = 1.0
@@ -41,7 +41,7 @@ texture = ExtResource("3_8buom")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.307933, 1.6083913, -10.195515)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1101517580]
-transform = Transform3D(0.14665031, 0.44838023, -0.8817306, 1.3130084e-08, 0.89136773, 0.4532809, 0.98918843, -0.0664738, 0.13071936, 23.511591, 6.828908, -3.2047577)
+transform = Transform3D(0.14665031, 0.44838023, -0.8817306, 1.3130084e-08, 0.89136773, 0.4532809, 0.98918843, -0.0664738, 0.13071936, 12.118807, 6.828908, -3.2047577)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=579529627]
 transform = Transform3D(453.37778, 0, 0, 0, 1, 0, 0, 0, 442.9641, -53.75287, -32.309635, 0)
