@@ -34,8 +34,6 @@ uniform float far_foam_threshold_boost : hint_range(0.0, 1.0) = 0.2;
 uniform float height_crest : hint_range(0.0, 5.0, 0.01) = 1.0;
 uniform float wave_freq : hint_range(0.1, 5.0, 0.01) = 1.0;
 uniform float detail_freq : hint_range(0.0, 5.0, 0.01) = 1.0;
-uniform float snap_grid = 0.05;
-uniform vec2 mesh_center = vec2(0.0);
 uniform float water_speed : hint_range(0.0, 5.0, 0.01) = 1.0;
 uniform int water_debug_view : hint_range(0, 3) = 0;
 uniform float object_foam_depth_start : hint_range(0.0, 10.0, 0.01) = 2.83;
@@ -132,9 +130,7 @@ float get_linear_depth(sampler2D d_tex, vec2 uv, mat4 inv_proj) {
 }
 
 void vertex() {
-	vec2 snapped_center = snap_grid > 0.0 ? floor(mesh_center / snap_grid + 0.5) * snap_grid : mesh_center;
-	vec2 local_offset = VERTEX.xz - mesh_center;
-	UV = snapped_center + local_offset;
+	UV = VERTEX.xz;
 	distance_to_camera = length(VERTEX.xz - CAMERA_POSITION_WORLD.xz);
 	distance_lod = get_distance_lod(distance_to_camera);
 

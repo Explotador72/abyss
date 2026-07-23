@@ -308,6 +308,8 @@ var _derived_height := 0.0
 @export_range(0.0, 64.0, 0.25) var follow_snap_size := 0.0
 ## Follow camera in editor.
 @export var follow_camera_in_editor := false
+## Use generated clipmap mesh in editor (for validation).
+@export var debug_use_generated_mesh_in_editor := false
 ## Enables far-ocean LOD rings and distance-based simplification.
 
 @export_group('Lod')
@@ -441,7 +443,6 @@ func _ready() -> void:
 	_update_sky_lighting_shader_parameters()
 	_update_far_lod_shader_parameters()
 	_update_water_mesh()
-	_set_water_shader_parameter(&'mesh_center', Vector2(global_position.x, global_position.z))
 
 func _process(delta : float) -> void:
 	_update_follow_camera()
@@ -515,16 +516,6 @@ func _update_scales_uniform() -> void:
 		var uv_scale := Vector2.ONE / params.tile_length
 		map_scales[i] = Vector4(uv_scale.x, uv_scale.y, params.displacement_scale, params.normal_scale)
 	_set_water_shader_parameter(&'map_scales', map_scales)
-
-	var snap_grid := 1e10
-	for i in cascade_count:
-		var params := parameters[i]
-		if params == null:
-			continue
-		var texel := minf(params.tile_length.x, params.tile_length.y) / float(simulation_map_size)
-		var effective := texel / maxf(wave_freq, 0.001)
-		snap_grid = minf(snap_grid, effective)
-	_set_water_shader_parameter(&'snap_grid', 0.05 if snap_grid > 1e9 else snap_grid)
 
 	_update_spectrum_blend_uniform()
 
@@ -698,7 +689,7 @@ func _clear_wave_generator() -> void:
 	_set_wave_blend_alpha(1.0)
 
 func _update_water_mesh() -> void:
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() and not debug_use_generated_mesh_in_editor:
 		mesh = EDITOR_WATER_PREVIEW_MESH
 		extra_cull_margin = maxf(256.0, EDITOR_WATER_PREVIEW_MESH.size.length() * 0.5)
 		_update_far_lod_shader_parameters()
@@ -724,7 +715,6 @@ func _update_follow_camera() -> void:
 	target_position.x = camera.global_position.x
 	target_position.z = camera.global_position.z
 	global_position = target_position
-	_set_water_shader_parameter(&'mesh_center', Vector2(global_position.x, global_position.z))
 
 func _segments_for_ring(radius: float) -> int:
 	return clampi(int(ceil(TAU * radius / maxf(target_arc_length, 0.1))), min_ring_segments, max_ring_segments)
