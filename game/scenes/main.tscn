@@ -24,7 +24,6 @@ stylized_flatness = 0.65
 wind_external = NodePath("../WindSystem")
 simulation_map_size = 512
 follow_camera_in_editor = true
-freeze_wave_simulation = true
 debug_use_generated_mesh_in_editor = true
 far_lod_radius = 666.0
 

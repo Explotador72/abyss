@@ -308,8 +308,6 @@ var _derived_height := 0.0
 @export_range(0.0, 64.0, 0.25) var follow_snap_size := 0.0
 ## Follow camera in editor.
 @export var follow_camera_in_editor := false
-## Freeze wave simulation (debug — displacement textures stop updating).
-@export var freeze_wave_simulation := false
 ## Use generated clipmap mesh in editor (for validation).
 @export var debug_use_generated_mesh_in_editor := false
 ## Enables far-ocean LOD rings and distance-based simplification.
@@ -445,7 +443,6 @@ func _ready() -> void:
 	_update_sky_lighting_shader_parameters()
 	_update_far_lod_shader_parameters()
 	_update_water_mesh()
-	_set_water_shader_parameter(&'mesh_center', Vector2(global_position.x, global_position.z))
 
 func _process(delta : float) -> void:
 	_update_follow_camera()
@@ -520,15 +517,6 @@ func _update_scales_uniform() -> void:
 		map_scales[i] = Vector4(uv_scale.x, uv_scale.y, params.displacement_scale, params.normal_scale)
 	_set_water_shader_parameter(&'map_scales', map_scales)
 
-	var snap_grid := 1e10
-	for i in mini(len(parameters), MAX_CASCADES):
-		var p := parameters[i]
-		if p == null:
-			continue
-		var texel := minf(p.tile_length.x, p.tile_length.y) / float(simulation_map_size)
-		snap_grid = mini(snap_grid, texel)
-	_set_water_shader_parameter(&'snap_grid', 0.0117 if snap_grid > 1e9 else snap_grid)
-
 	_update_spectrum_blend_uniform()
 
 func _update_spectrum_blend_uniform() -> void:
@@ -547,8 +535,7 @@ func _update_water(delta : float) -> void:
 	if wave_generator == null: _setup_wave_generator()
 	if wave_generator == null:
 		return
-	if not freeze_wave_simulation:
-		wave_generator.update(delta, parameters, get_external_wind_speed(), get_external_wind_direction(), true)
+	wave_generator.update(delta, parameters, get_external_wind_speed(), get_external_wind_direction(), true)
 	_update_spectrum_blend_uniform()
 
 func sample_water_surface(world_position: Vector3, request_owner: Object) -> WaterSurfaceSample:
@@ -727,8 +714,11 @@ func _update_follow_camera() -> void:
 	var target_position := global_position
 	target_position.x = camera.global_position.x
 	target_position.z = camera.global_position.z
+	var snap_threshold := maxf(mesh_inner_extent * 0.5, 64.0)
+	var delta := target_position - global_position
+	if absf(delta.x) < snap_threshold and absf(delta.z) < snap_threshold:
+		return
 	global_position = target_position
-	_set_water_shader_parameter(&'mesh_center', Vector2(global_position.x, global_position.z))
 
 func _segments_for_ring(radius: float) -> int:
 	return clampi(int(ceil(TAU * radius / maxf(target_arc_length, 0.1))), min_ring_segments, max_ring_segments)
